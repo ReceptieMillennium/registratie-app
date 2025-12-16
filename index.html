@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registratie</title>
+
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- iOS "Add to Home Screen" friendly -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Registratie" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+
+    <style>
+      html, body { height: 100%; margin: 0; }
+      .topbar {
+        display: flex; gap: 10px; align-items: center;
+        padding: 10px; border-bottom: 1px solid #eee;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      .btn {
+        padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px;
+        text-decoration: none; color: #111; background: #fff;
+      }
+      .frame { width: 100%; height: calc(100% - 56px); border: 0; }
+      .hint { opacity: .7; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a class="btn" href="#" id="openDirect">Open direct</a>
+      <span class="hint">Als het formulier niet laadt in het venster hieronder, gebruik “Open direct”.</span>
+    </div>
+
+    <iframe class="frame" id="appFrame" title="Registratie"></iframe>
+
+    <script>
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwHKhuRGxPfuyq9AKXJ1f-zLPfu2Ql6xR_bvQd8tdo7cEsVQtWKvSUDlzJbjyvM5GBzw/exec";
+
+      // Laad in iframe
+      document.getElementById("appFrame").src = SCRIPT_URL;
+
+      // Fallback: direct openen (handig als iframe ooit geblokkeerd wordt)
+      const direct = document.getElementById("openDirect");
+      direct.href = SCRIPT_URL;
+      direct.target = "_blank";
+      direct.rel = "noopener";
+
+      // Service worker (nodig zodat Chrome dit als “app” ziet)
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    </script>
+  </body>
+</html>
